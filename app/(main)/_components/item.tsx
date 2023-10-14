@@ -36,9 +36,9 @@ interface ItemProps {
   isSearch?: boolean;
   level?: number;
   onExpand?: () => void;
+  onClick?: () => void;
 
   label: string;
-  onClick: () => void;
   icon: LucideIcon;
 }
 
@@ -86,7 +86,7 @@ export const Item = ({
 
     if (!id) return;
 
-    const promise = create({ title: 'Untitle', parentDocument: id }).then(
+    const promise = create({ title: 'Untitled', parentDocument: id }).then(
       (documentId) => {
         if (!expanded) {
           onExpand?.();
