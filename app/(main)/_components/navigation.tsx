@@ -1,7 +1,7 @@
 'use client';
 
 import { ElementRef, useEffect, useRef, useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 
 import {
   ChevronsLeft,
@@ -16,12 +16,15 @@ import { useMediaQuery } from 'usehooks-ts';
 import { useMutation } from 'convex/react';
 import { toast } from 'sonner';
 
+// Lib utility
 import { cn } from '@/lib/utils';
 import { api } from '@/convex/_generated/api';
 
+// Custom Hooks
 import { useSearch } from '@/hooks/use-search';
 import { useSettings } from '@/hooks/use-settings';
 
+// Components
 import {
   Popover,
   PopoverTrigger,
@@ -32,12 +35,14 @@ import { UserItem } from './user-item';
 import { Item } from './item';
 import { DocumentList } from './document-list';
 import { TrashBox } from './trash-box';
+import { Navbar } from './navbar';
 
 export const Navigation = () => {
   const search = useSearch();
   const settings = useSettings();
 
   const pathname = usePathname();
+  const params = useParams();
   const isMobile = useMediaQuery('(max-width: 768px)');
   const create = useMutation(api.documents.create);
 
@@ -192,15 +197,19 @@ export const Navigation = () => {
           isMobile && 'left-0 w-full'
         )}
       >
-        <nav className="bg-transparent px-3 py-2 w-full">
-          {isCollapsed && (
-            <MenuIcon
-              className="h-6 w-6 text-muted-foreground"
-              role="button"
-              onClick={resetWidth}
-            />
-          )}
-        </nav>
+        {!!params.documentId ? (
+          <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+        ) : (
+          <nav className="bg-transparent px-3 py-2 w-full">
+            {isCollapsed && (
+              <MenuIcon
+                className="h-6 w-6 text-muted-foreground"
+                role="button"
+                onClick={resetWidth}
+              />
+            )}
+          </nav>
+        )}
       </div>
     </>
   );
